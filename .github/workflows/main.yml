@@ -1,39 +1,57 @@
-name: Optimized Daily Views
+name: Real Browser Views
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 12 * * *' # Runs once daily at 12:00 PM UTC
+    - cron: '0 12 * * *'
 
 jobs:
-  refresh:
+  browser-views:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Process All Links
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install Browser
         run: |
-          # Check if the file is empty first to save cloud minutes
-          if [ ! -s links.txt ]; then
-            echo "links.txt is empty. Skipping run."
-            exit 0
-          fi
+          pip install playwright
+          playwright install chromium
+      - name: Real Human Views
+        run: |
+          python - <<EOF
+          import time
+          from playwright.sync_api import sync_playwright
 
-          while read -r url; do
-            echo "Processing 3,000 views for $url"
-            for i in {1..3000}; do
-              curl -s -L -A "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)" "$url" > /dev/null
-              sleep 0.4
-            done
-          done < links.txt
+          def run_views():
+              with sync_playwright() as p:
+                  browser = p.chromium.launch(headless=True)
+                  context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
+                  page = context.new_page()
+                  
+                  with open('links.txt', 'r') as f:
+                      links = f.readlines()
+                  
+                  for url in links:
+                      url = url.strip()
+                      if not url: continue
+                      print(f"Opening {url}")
+                      for i in range(1, 3001):
+                          page.goto(url, wait_until="networkidle")
+                          time.sleep(0.4) # Stay free forever speed
+                          if i % 100 == 0: print(f"Sent {i} real views...")
+                  browser.close()
 
-          # Clear the file after successful completion
+          run_views()
+          EOF
+      - name: Clear Links
+        run: |
           > links.txt
-          
-      - name: Save Changes
-        run: |
           git config --global user.name "CloudBot"
           git config --global user.email "bot@github.com"
           git add links.txt
-          git commit -m "Cleared processed links" || echo "No changes to commit"
+          git commit -m "Links cleared" || echo "No changes"
           git push
+
