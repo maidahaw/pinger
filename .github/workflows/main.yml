@@ -1,0 +1,35 @@
+name: 2-Hour Window Per Link
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *' # Runs once daily
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Targeted 2-Hour Loop
+        run: |
+          while read -r url; do
+            echo "Starting 3,000 views for $url (Expected time: 2 hours)"
+            for i in {1..3000}; do
+              # Hits the link and moves on
+              curl -s -L -A "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)" "$url" > /dev/null
+              sleep 2.4
+            done
+            echo "Finished $url"
+          done < links.txt
+
+          # Clears the links so they don't run again tomorrow
+          > links.txt
+          
+      - name: Save Changes
+        run: |
+          git config --global user.name "CloudBot"
+          git config --global user.email "bot@github.com"
+          git add links.txt
+          git commit -m "Links cleared" || echo "No changes"
+          git push
