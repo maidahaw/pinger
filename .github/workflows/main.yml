@@ -1,4 +1,4 @@
-name: 1500 Optimized Browser Views
+name: Fixed 1500 Views Per Link
 on:
   workflow_dispatch:
   schedule:
@@ -34,15 +34,18 @@ jobs:
                   with open('links.txt', 'r') as f:
                       links = f.readlines()
                   
+                  # This part ensures EVERY link in your file gets its own 1500 views
                   for url in links:
                       url = url.strip()
                       if not url: continue
-                      print(f"Starting 1,500 views for {url}")
+                      print(f"--- Starting 1,500 views for {url} ---", flush=True)
                       for i in range(1, 1501):
                           try:
-                              time.sleep(0.3)
                               page.goto(url, wait_until="commit", timeout=60000)
-                              if i % 100 == 0: print(f"Sent {i} views to {url}")
+                              # Set to 4 seconds as requested
+                              time.sleep(4) 
+                              if i % 50 == 0: 
+                                  print(f"Sent {i}/1500 views to {url}", flush=True)
                           except Exception:
                               continue
                   browser.close()
@@ -57,4 +60,3 @@ jobs:
           git add links.txt
           git commit -m "Links cleared" || echo "No changes"
           git push
-
