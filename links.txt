@@ -1,7 +1,5 @@
-https://app.binance.com/uni-qr/cpos/295773105086738?l=zh-CN&r=KUKGOA0G&uc=web_square_share_link&uco=HFxdYksIpjUhS6RI0hoPlA&us=copylink
-https://app.binance.com/uni-qr/cpos/295787387003809?l=zh-CN&r=KUKGOA0G&uc=web_square_share_link&uco=HFxdYksIpjUhS6RI0hoPlA&us=copylink
-https://app.binance.com/uni-qr/cart/295795008872305?l=zh-CN&r=KUKGOA0G&uc=web_square_share_link&uco=HFxdYksIpjUhS6RI0hoPlA&us=copylink
-https://app.binance.com/uni-qr/cart/295895903049442?l=zh-CN&r=KUKGOA0G&uc=web_square_share_link&uco=HFxdYksIpjUhS6RI0hoPlA&us=copylink
+https://app.binance.com/uni-qr/cart/295895903049442?l=en&r=KUKGOA0G&uc=web_square_share_link&uco=Y8ermjTT_7evJojeW7VXLA&us=copylink
+https://app.binance.com/uni-qr/cpos/295773105086738?l=en&r=KUKGOA0G&uc=web_square_share_link&uco=Y8ermjTT_7evJojeW7VXLA&us=copylink
 
 
 
